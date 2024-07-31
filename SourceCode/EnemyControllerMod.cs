@@ -1,4 +1,5 @@
 using HarmonyLib;
+// using UnityEngine;
 using static HiddenHUD.MainMod;
 
 namespace HiddenHUD;
@@ -6,17 +7,13 @@ namespace HiddenHUD;
 [HarmonyPatch(typeof(EnemyController), "KillCharacter")]
 internal static class EnemyController_KillCharacter {
     internal static void Postfix(EnemyController __instance) {
-        if (number_of_active_enemies <= 0) return;
-        if (__instance.Room != PlayerManager.GetCurrentPlayerRoom()) return;
-        if (!__instance.IsDead && !__instance.StatusEffectController.HasStatusEffect(StatusEffectType.Enemy_DeathDelay)) return;
+        // Debug.Log("TEMP: EnemyController_KillCharacter");
+        // Debug.Log("TEMP: name " + __instance.name);
+        if (!active_enemy_list.Contains(__instance.EnemySpawnController)) return;
+        active_enemy_list.Remove(__instance.EnemySpawnController);
+        // Debug.Log("TEMP: 2");
 
-        number_of_active_enemies -= 1;
-        if (number_of_active_enemies <= 0) {
-            // Do this in case some enemies did spawn after the room loaded. Might
-            // not be required. Just to be safe.
-            number_of_active_enemies = get_number_of_active_enemies_in_room(PlayerManager.GetCurrentPlayerRoom());
-        }
-        if (is_hud_visible_when_enemies_are_dead && number_of_active_enemies <= 0) {
+        if (is_hud_visible_when_enemies_are_dead && active_enemy_list.Count == 0) {
             show_hud();
         }
     }

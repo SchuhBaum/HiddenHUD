@@ -1,16 +1,17 @@
-﻿using BepInEx;
+﻿using System.Collections.Generic;
+using BepInEx;
 using UnityEngine;
 using Wob_Common;
 using static EnemyType;
 
 namespace HiddenHUD;
 
-[BepInPlugin("SchuhBaum.HiddenHUD", "HiddenHUD", "0.0.2")]
+[BepInPlugin("SchuhBaum.HiddenHUD", "HiddenHUD", "0.0.3")]
 public class MainMod : BaseUnityPlugin {
     // meta data
     public static string author = "SchuhBaum";
     public static string mod_id = "HiddenHUD";
-    public static string version = "v0.0.2";
+    public static string version = "v0.0.3";
 
     // options
     public static bool is_enemy_hud_visible                 = false;
@@ -24,8 +25,8 @@ public class MainMod : BaseUnityPlugin {
     public static bool is_relics_visible                    = false;
 
 	// variables
+    public static List<EnemySpawnController> active_enemy_list = new();
     public static bool is_initialized = false;
-    public static int number_of_active_enemies = 0;
 
     //
     // main
@@ -75,16 +76,6 @@ public class MainMod : BaseUnityPlugin {
     // public
     //
 
-    public static int get_number_of_active_enemies_in_room(BaseRoom room) {
-        int result = 0;
-        foreach (EnemySpawnController enemy_spawn_controller in room.SpawnControllerManager.EnemySpawnControllers) {
-            if (enemy_spawn_controller.IsDead) continue;
-            if (enemy_spawn_controller.Type == BouncySpike) continue;
-            ++result;
-        }
-        return result;
-    }
-
     public static void hide_hud() {
         if (!is_fairy_rule_visible) HUDManager.SetHUDVisible(HUDType.FairyRule, false);
         if (!is_player_hud_visible) HUDManager.SetHUDVisible(HUDType.PlayerHUD, false);
@@ -105,5 +96,18 @@ public class MainMod : BaseUnityPlugin {
         if (!is_now_entering_visible) HUDManager.SetHUDVisible(HUDType.NowEntering, true);
         if (!is_objective_complete_visible) HUDManager.SetHUDVisible(HUDType.ObjectiveComplete, true);
         if (!is_global_timer_visible) HUDManager.SetHUDVisible(HUDType.GlobalTimer, true);
+    }
+
+    public static void update_active_enemy_list(BaseRoom room) {
+        active_enemy_list.Clear();
+        foreach (EnemySpawnController enemy_spawn_controller in room.SpawnControllerManager.EnemySpawnControllers) {
+            if (enemy_spawn_controller.IsDead) continue;
+            if (enemy_spawn_controller.Type == BouncySpike) continue;
+            if (enemy_spawn_controller.Type == Dummy) continue;
+            if (enemy_spawn_controller.Type == Target) continue;
+            // Debug.Log("TEMP: type " + enemy_spawn_controller.Type);
+            // Debug.Log("TEMP: name " + enemy_spawn_controller.name);
+            active_enemy_list.Add(enemy_spawn_controller);
+        }
     }
 }
