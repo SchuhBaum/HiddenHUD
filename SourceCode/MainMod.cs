@@ -6,12 +6,12 @@ using static EnemyType;
 
 namespace HiddenHUD;
 
-[BepInPlugin("SchuhBaum.HiddenHUD", "HiddenHUD", "0.0.4")]
+[BepInPlugin("SchuhBaum.HiddenHUD", "HiddenHUD", "0.0.5")]
 public class MainMod : BaseUnityPlugin {
     // meta data
     public static string author = "SchuhBaum";
     public static string mod_id = "HiddenHUD";
-    public static string version = "v0.0.4";
+    public static string version = "v0.0.5";
 
     // options
     public static bool is_enemy_hud_visible                 = false;
@@ -25,7 +25,8 @@ public class MainMod : BaseUnityPlugin {
     public static bool is_relics_visible                    = false;
 
 	// variables
-    public static List<EnemySpawnController> active_enemy_list = new();
+    public static List<EnemySpawnController> active_enemy_spawner_list = new();
+    public static bool is_hud_visible = true;
     public static bool is_initialized = false;
 
     //
@@ -77,6 +78,7 @@ public class MainMod : BaseUnityPlugin {
     //
 
     public static void hide_hud() {
+        is_hud_visible = false;
         if (!is_fairy_rule_visible)         HUDManager.SetHUDVisible(HUDType.FairyRule, false);
         if (!is_player_hud_visible)         HUDManager.SetHUDVisible(HUDType.PlayerHUD, false);
         if (!is_player_minimap_visible)     HUDManager.SetHUDVisible(HUDType.PlayerMinimap, false);
@@ -88,6 +90,7 @@ public class MainMod : BaseUnityPlugin {
     }
 
     public static void show_hud() {
+        is_hud_visible = true;
         if (!is_fairy_rule_visible)         HUDManager.SetHUDVisible(HUDType.FairyRule, true);
         if (!is_player_hud_visible)         HUDManager.SetHUDVisible(HUDType.PlayerHUD, true);
         if (!is_player_minimap_visible)     HUDManager.SetHUDVisible(HUDType.PlayerMinimap, true);
@@ -99,13 +102,18 @@ public class MainMod : BaseUnityPlugin {
     }
 
     public static void update_active_enemy_list(BaseRoom room) {
-        active_enemy_list.Clear();
+        // In fairy rooms enemies can only be summoned. Although, spawners are
+        // there as well. They indicate that the enemies are not dead -- even when
+        // the challenge has already finished.
+        active_enemy_spawner_list.Clear();
+        if (room.SpecialRoomType == SpecialRoomType.Fairy) return;
+
         foreach (EnemySpawnController enemy_spawn_controller in room.SpawnControllerManager.EnemySpawnControllers) {
             if (enemy_spawn_controller.IsDead) continue;
             if (enemy_spawn_controller.Type == BouncySpike) continue;
             if (enemy_spawn_controller.Type == Dummy) continue;
             if (enemy_spawn_controller.Type == Target) continue;
-            active_enemy_list.Add(enemy_spawn_controller);
+            active_enemy_spawner_list.Add(enemy_spawn_controller);
         }
     }
 }

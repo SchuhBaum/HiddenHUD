@@ -7,7 +7,7 @@ namespace HiddenHUD;
 internal static class PlayerController_EnterRoom {
     internal static void Postfix() {
         update_active_enemy_list(PlayerManager.GetCurrentPlayerRoom());
-        if (is_hud_visible_when_enemies_are_dead && active_enemy_list.Count == 0) {
+        if (is_hud_visible_when_enemies_are_dead && active_enemy_spawner_list.Count == 0) {
             show_hud();
             return;
         }
