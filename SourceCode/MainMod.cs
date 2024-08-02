@@ -6,12 +6,12 @@ using static EnemyType;
 
 namespace HiddenHUD;
 
-[BepInPlugin("SchuhBaum.HiddenHUD", "HiddenHUD", "0.0.6")]
+[BepInPlugin("SchuhBaum.HiddenHUD", "HiddenHUD", "0.0.7")]
 public class MainMod : BaseUnityPlugin {
     // meta data
     public static string author = "SchuhBaum";
     public static string mod_id = "HiddenHUD";
-    public static string version = "v0.0.6";
+    public static string version = "v0.0.7";
 
     // options
     public static bool is_enemy_hud_visible                 = false;
@@ -113,6 +113,7 @@ public class MainMod : BaseUnityPlugin {
             if (enemy_spawn_controller.Type == BouncySpike) continue;
             if (enemy_spawn_controller.Type == Dummy) continue;
             if (enemy_spawn_controller.Type == Target) continue;
+            if (enemy_spawn_controller.Type == Eggplant) continue;
             active_enemy_spawn_controller_list.Add(enemy_spawn_controller);
         }
     }
