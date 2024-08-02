@@ -6,12 +6,12 @@ using static EnemyType;
 
 namespace HiddenHUD;
 
-[BepInPlugin("SchuhBaum.HiddenHUD", "HiddenHUD", "0.0.5")]
+[BepInPlugin("SchuhBaum.HiddenHUD", "HiddenHUD", "0.0.6")]
 public class MainMod : BaseUnityPlugin {
     // meta data
     public static string author = "SchuhBaum";
     public static string mod_id = "HiddenHUD";
-    public static string version = "v0.0.5";
+    public static string version = "v0.0.6";
 
     // options
     public static bool is_enemy_hud_visible                 = false;
@@ -25,7 +25,7 @@ public class MainMod : BaseUnityPlugin {
     public static bool is_relics_visible                    = false;
 
 	// variables
-    public static List<EnemySpawnController> active_enemy_spawner_list = new();
+    public static List<EnemySpawnController> active_enemy_spawn_controller_list = new();
     public static bool is_hud_visible = true;
     public static bool is_initialized = false;
 
@@ -101,11 +101,11 @@ public class MainMod : BaseUnityPlugin {
         if (!is_global_timer_visible)       HUDManager.SetHUDVisible(HUDType.GlobalTimer, true);
     }
 
-    public static void update_active_enemy_list(BaseRoom room) {
+    public static void update_active_enemy_spawn_controller_list(BaseRoom room) {
         // In fairy rooms enemies can only be summoned. Although, spawners are
         // there as well. They indicate that the enemies are not dead -- even when
         // the challenge has already finished.
-        active_enemy_spawner_list.Clear();
+        active_enemy_spawn_controller_list.Clear();
         if (room.SpecialRoomType == SpecialRoomType.Fairy) return;
 
         foreach (EnemySpawnController enemy_spawn_controller in room.SpawnControllerManager.EnemySpawnControllers) {
@@ -113,7 +113,7 @@ public class MainMod : BaseUnityPlugin {
             if (enemy_spawn_controller.Type == BouncySpike) continue;
             if (enemy_spawn_controller.Type == Dummy) continue;
             if (enemy_spawn_controller.Type == Target) continue;
-            active_enemy_spawner_list.Add(enemy_spawn_controller);
+            active_enemy_spawn_controller_list.Add(enemy_spawn_controller);
         }
     }
 }
