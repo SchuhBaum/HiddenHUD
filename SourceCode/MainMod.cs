@@ -2,16 +2,15 @@
 using BepInEx;
 using UnityEngine;
 using Wob_Common;
-using static EnemyType;
 
 namespace HiddenHUD;
 
-[BepInPlugin("SchuhBaum.HiddenHUD", "HiddenHUD", "0.0.7")]
+[BepInPlugin("SchuhBaum.HiddenHUD", "HiddenHUD", "0.0.8")]
 public class MainMod : BaseUnityPlugin {
     // meta data
     public static string author = "SchuhBaum";
     public static string mod_id = "HiddenHUD";
-    public static string version = "v0.0.7";
+    public static string version = "v0.0.8";
 
     // options
     public static bool is_enemy_hud_visible                 = false;
@@ -110,10 +109,10 @@ public class MainMod : BaseUnityPlugin {
 
         foreach (EnemySpawnController enemy_spawn_controller in room.SpawnControllerManager.EnemySpawnControllers) {
             if (enemy_spawn_controller.IsDead) continue;
-            if (enemy_spawn_controller.Type == BouncySpike) continue;
-            if (enemy_spawn_controller.Type == Dummy) continue;
-            if (enemy_spawn_controller.Type == Target) continue;
-            if (enemy_spawn_controller.Type == Eggplant) continue;
+            if (enemy_spawn_controller.Type == EnemyType.BouncySpike) continue;
+            if (enemy_spawn_controller.Type == EnemyType.Dummy) continue;
+            if (enemy_spawn_controller.Type == EnemyType.Target) continue;
+            if (enemy_spawn_controller.Type == EnemyType.Eggplant) continue;
             active_enemy_spawn_controller_list.Add(enemy_spawn_controller);
         }
     }
