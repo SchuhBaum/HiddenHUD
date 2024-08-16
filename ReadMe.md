@@ -6,7 +6,7 @@ This is a mod for Rogue Legacy 2.
 Hides the player HUD and other elements like the minimap. Can be configured in the file `[...]/Rogue Legacy 2/BepInEx/config/SchuhBaum.HiddenHUD.cfg`.
 
 Here is a youtube video:  
-[https://www.youtube.com/watch?v=Edf0pixzmAo](https://www.youtube.com/watch?v=Edf0pixzmAo)
+[https://www.youtube.com/watch?v=AwMJlXWB9Ic](https://www.youtube.com/watch?v=AwMJlXWB9Ic)
 
 ### Installation
 0.1 Download the file `BepInEx_win_x64_5.4.23.2.zip` (or newer) from [here](https://github.com/BepInEx/BepInEx/releases).
